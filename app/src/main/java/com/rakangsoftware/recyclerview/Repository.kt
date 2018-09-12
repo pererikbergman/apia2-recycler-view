@@ -14,7 +14,7 @@ class Repository {
     operator fun get(context: Context): List<Movie> {
         val gson = Gson()
         val data = gson.fromJson(loadJSONFromAsset(context), Array<Movie>::class.java)
-        return ArrayList(Arrays.asList(*data))
+        return Arrays.asList(*data)
     }
 
     private fun loadJSONFromAsset(context: Context): String? {
