@@ -12,9 +12,9 @@ import java.util.Arrays
 class Repository {
 
     operator fun get(context: Context): List<Movie> {
-        val gson = Gson()
+         val gson = Gson()
         val data = gson.fromJson(loadJSONFromAsset(context), Array<Movie>::class.java)
-        return Arrays.asList(*data)
+         return Arrays.asList(*data)
     }
 
     private fun loadJSONFromAsset(context: Context): String? {

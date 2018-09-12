@@ -19,13 +19,18 @@ class MoviesActivity : AppCompatActivity() {
         // Set the layout manager
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.setLayoutManager(layoutManager)
+        recyclerView.layoutManager = layoutManager
 
         // Set the adapter
         val movies = Repository().get(this)
 
         val adapter = MovieAdapter()
+        adapter.setOnMovieClicked(object : MovieViewHolder.OnMovieClicked{
+            override fun onMovieClicked(movie: Movie) {
+                println("Movie $movie")
+            }
+        })
         adapter.setData(movies)
-        recyclerView.setAdapter(adapter)
+        recyclerView.adapter = adapter
     }
 }

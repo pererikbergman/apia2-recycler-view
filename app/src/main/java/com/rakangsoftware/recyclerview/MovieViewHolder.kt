@@ -10,44 +10,58 @@ import android.widget.TextView
 
 import com.bumptech.glide.Glide
 
-class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class MovieViewHolder(itemView: View, clickListener: OnMovieClicked) : RecyclerView.ViewHolder(itemView) {
 
-    private val mPoster: ImageView
-    private val mGenres: TextView
-    private val mTitle: TextView
-    private val mYear: TextView
+    private lateinit var movie: Movie
+
+    private val poster: ImageView
+    private val genres: TextView
+    private val title: TextView
+    private val year: TextView
 
     init {
+        poster = itemView.findViewById(R.id.poster)
+        title = itemView.findViewById(R.id.title)
+        year = itemView.findViewById(R.id.year)
+        genres = itemView.findViewById(R.id.genres)
 
-        mPoster = itemView.findViewById(R.id.poster)
-        mTitle = itemView.findViewById(R.id.title)
-        mYear = itemView.findViewById(R.id.year)
-        mGenres = itemView.findViewById(R.id.genres)
+        itemView.setOnClickListener(object :View.OnClickListener{
+            override fun onClick(p0: View?) {
+               clickListener.onMovieClicked(movie!!)
+            }
+        })
     }
 
-    fun bind(model: Movie) {
-        mTitle.text = model.title
-        mYear.text = model.year
-        mGenres.text = getGenres(model.genres)
+    fun bind(movie: Movie) {
+        this.movie = movie
+
+        title.text = movie.title
+        year.text = movie.year
+        genres.text = getGenres(movie.genres)
 
         Glide
                 .with(itemView.context)
-                .load(model.posterurl)
-                .into(mPoster)
+                .load(movie.posterurl)
+                .into(poster)
     }
 
     private fun getGenres(genres: Array<String>): String {
         return TextUtils.join(", ", genres)
     }
 
+    interface OnMovieClicked {
+        fun onMovieClicked(movie: Movie)
+    }
+
     companion object {
-        fun newInstance(parent: ViewGroup): MovieViewHolder {
+        fun newInstance(parent: ViewGroup, clickListener: OnMovieClicked): MovieViewHolder {
             return MovieViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                             R.layout.list_item,
                             parent,
                             false
-                    )
+                    ),
+                    clickListener
             )
         }
     }
